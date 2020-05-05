@@ -63,11 +63,35 @@ app.put("/repositories/:id", validProjectId, (request, response) => {
 });
 
 app.delete("/repositories/:id", (request, response) => {
-  // TODO
+  const { id } = request.params;
+  const { title, url, techs } = request.body;
+
+  const reporsitorieIndex = repositories.findIndex((repo) => repo.id === id);
+
+  if (reporsitorieIndex < 0) {
+    return response
+      .status(401)
+      .json({ error: { message: "Repositório não encontrado" } });
+  }
+
+  repositories.splice(reporsitorieIndex, 1);
+
+  return response.status(204).send();
 });
 
-app.post("/repositories/:id/like", (request, response) => {
-  // TODO
+app.post("/repositories/:id/like", validProjectId, (request, response) => {
+  const { id } = request.params;
+  const reporsitorieIndex = repositories.findIndex((repo) => repo.id === id);
+
+  if (reporsitorieIndex < 0) {
+    return response
+      .status(401)
+      .json({ error: { message: "Repositório não encontrado" } });
+  }
+  const likeRepo = repositories[reporsitorieIndex].likes;
+  repositories[reporsitorieIndex].likes = likeRepo + 1;
+
+  return response.status(200).json(repositories[reporsitorieIndex]);
 });
 
 module.exports = app;
