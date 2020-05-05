@@ -14,7 +14,7 @@ function validProjectId(request, response, next) {
   const { id } = request.params;
   if (!isUuid(id)) {
     return response
-      .status(401)
+      .status(400)
       .json({ error: { message: "Invalid project id" } });
   }
   return next();
@@ -54,7 +54,7 @@ app.put("/repositories/:id", validProjectId, (request, response) => {
 
   if (reporsitorieIndex < 0) {
     return response
-      .status(401)
+      .status(400)
       .json({ error: { message: "Repositório não encontrado" } });
   }
   const repository = { id, title, url, techs };
@@ -70,7 +70,7 @@ app.delete("/repositories/:id", (request, response) => {
 
   if (reporsitorieIndex < 0) {
     return response
-      .status(401)
+      .status(400)
       .json({ error: { message: "Repositório não encontrado" } });
   }
 
@@ -85,7 +85,7 @@ app.post("/repositories/:id/like", validProjectId, (request, response) => {
 
   if (reporsitorieIndex < 0) {
     return response
-      .status(401)
+      .status(400)
       .json({ error: { message: "Repositório não encontrado" } });
   }
   const likeRepo = repositories[reporsitorieIndex].likes;
